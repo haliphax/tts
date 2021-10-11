@@ -1,0 +1,48 @@
+version: '3'
+networks:
+  external:
+  internal:
+services:
+  nginx:
+    image: nginx:latest
+    expose:
+        - 80
+    labels:
+        - traefik.enable=true
+        - traefik.http.middlewares.tts_headers.headers.customrequestheaders.Origin=
+        - traefik.http.middlewares.tts_headers.headers.sslredirect=true
+        - traefik.http.middlewares.tts_redirect.redirectregex.permanent=true
+        - traefik.http.middlewares.tts_redirect.redirectregex.regex=^http://(.*)
+        - traefik.http.middlewares.tts_redirect.redirectregex.replacement=https://$$1
+        - traefik.http.routers.tts.entrypoints=web
+        - traefik.http.routers.tts.middlewares=tts_headers@docker
+        - traefik.http.routers.tts.rule=HostHeader(`tts.oddnetwork.org`)
+        - traefik.http.routers.tts.tls=true
+        - traefik.http.routers.tts_redirect.entrypoints=web
+        - traefik.http.routers.tts_redirect.middlewares=tts_redirect@docker
+        - traefik.http.routers.tts_redirect.rule=HostHeader(`tts.oddnetwork.org`)
+        - traefik.http.services.tts.loadbalancer.sticky=true
+        - traefik.http.services.tts.loadbalancer.sticky.cookie.httponly=true
+        - traefik.http.services.tts.loadbalancer.sticky.cookie.secure=true
+    networks:
+        - external
+        - internal
+    volumes:
+        - ./tts:/usr/share/nginx/html
+  traefik:
+    command:
+      - --api.insecure=true
+      - --entrypoints.web.address=:80
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=tts_external
+    depends_on:
+      - nginx
+    image: traefik:latest
+    ports:
+      - 5001:80
+      - 5002:8080
+    networks:
+      - external
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

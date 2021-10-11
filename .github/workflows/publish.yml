@@ -1,0 +1,21 @@
+name: Publish service
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Publish
+      run: |
+        mv ./tts ./docs
+        cd ./docs
+        wget https://github.com/tmijs/tmi.js/releases/download/v1.8.5/tmi.min.js
+        cd ..
+        git config user.email git@github.com
+        git config user.name 'GitHub Actions'
+        git add .
+        git commit -m 'publish site'
+        git push -f -u origin master:gh-pages

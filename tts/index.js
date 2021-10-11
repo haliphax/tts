@@ -7,7 +7,9 @@ const twitch = new tmi.Client({
 		password: `oauth:${qs.oauth}`,
 	},
 });
+
 const speech = new SpeechSynthesisUtterance();
+speech.lang = qs.lang || 'en-US';
 
 const isBroadcaster = (tags) => tags.badges.hasOwnProperty('broadcaster');
 const isModerator = (tags) => tags.mod;

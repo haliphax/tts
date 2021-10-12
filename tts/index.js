@@ -9,7 +9,7 @@ const twitch = new tmi.Client({
 });
 
 const speech = new SpeechSynthesisUtterance();
-speech.lang = qs.lang || 'en-US';
+speech.lang = qs.lang || 'en';
 
 const isBroadcaster = (tags) => tags.badges.hasOwnProperty('broadcaster');
 const isModerator = (tags) => tags.mod;

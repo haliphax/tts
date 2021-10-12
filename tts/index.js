@@ -27,13 +27,13 @@ twitch.on('message', (channel, tags, message, self) => {
 
 		switch (command) {
 			case 'ttsecho':
-				if (!isBroadcaster && !isModerator(tags))
+				if (!isBroadcaster(tags) && !isModerator(tags))
 					return;
 
 				twitch.say(qs.channel, tags['custom-reward-id']);
 				break;
 			case 'tts':
-				if (!isBroadcaster && !isModerator(tags) || !args)
+				if (!isBroadcaster(tags) && !isModerator(tags) || !args)
 					return;
 
 				speech.text = args;

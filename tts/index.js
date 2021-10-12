@@ -44,11 +44,6 @@ twitch.on('message', (channel, tags, message, self) => {
 				speech.text = args;
 				speechSynthesis.speak(speech);
 				break;
-			case 'voices':
-				if (!isBroadcaster(tags) && !isModerator(tags))
-					return;
-
-				twitch.say(qs.channel, `Voices: ${speechSynthesis.getVoices()}`);
 		}
 	}
 	else if (qs.hasOwnProperty('reward')

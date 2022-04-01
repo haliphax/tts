@@ -1,12 +1,12 @@
-const qs = Object.fromEntries(
-	window.location.href.split('?')[1].split('&').map(v => v.split('=')));
-const twitch = new tmi.Client({
-	channels: [qs.channel],
-	identity: {
-		username: qs.username,
-		password: `oauth:${qs.oauth}`,
-	},
-});
+import constants from './constants.js';
+import { hs } from './util.js';
+import { isBroadcaster, isModerator, twitchClient } from './twitch.js';
+
+for (let prop of ['channel', 'oauth', 'username'])
+	if (!hs.hasOwnProperty(prop))
+		window.location = constants.OAUTH_URL;
+
+const twitch = twitchClient();
 
 speechSynthesis.onvoiceschanged = e => {
   speechSynthesis.getVoices();
@@ -14,10 +14,7 @@ speechSynthesis.onvoiceschanged = e => {
 speechSynthesis.getVoices();
 
 const speech = new SpeechSynthesisUtterance();
-speech.lang = qs.lang || 'en';
-
-const isBroadcaster = (tags) => tags.badges.hasOwnProperty('broadcaster');
-const isModerator = (tags) => tags.mod;
+speech.lang = hs.lang || 'en';
 
 const commandRgx = /^(\![-_.a-z0-9]+)(?:\s+(.+))?$/i;
 
@@ -35,7 +32,7 @@ twitch.on('message', (channel, tags, message, self) => {
 				if (!isBroadcaster(tags) && !isModerator(tags))
 					return;
 
-				twitch.say(qs.channel, tags['custom-reward-id']);
+				twitch.say(hs.channel, tags['custom-reward-id']);
 				break;
 			case 'tts':
 				if (!isBroadcaster(tags) && !isModerator(tags) || !args)
@@ -46,8 +43,8 @@ twitch.on('message', (channel, tags, message, self) => {
 				break;
 		}
 	}
-	else if (qs.hasOwnProperty('reward')
-		&& tags['custom-reward-id'] == qs.reward)
+	else if (hs.hasOwnProperty('reward')
+		&& tags['custom-reward-id'] == hs.reward)
 	{
 		speech.text = message;
 		speechSynthesis.speak(speech);
@@ -55,3 +52,4 @@ twitch.on('message', (channel, tags, message, self) => {
 });
 
 twitch.connect();
+setTimeout(() => document.body.style = 'display:none', 3000);

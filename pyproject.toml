@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hxtts"
+requires-python = ">=3.11"
+version = "1.0.0a0"
+dynamic = ["dependencies", "optional-dependencies"]
+
+[tool.setuptools]
+packages = ["engine"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "engine/requirements.txt"}
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = {file = "engine/requirements-dev.txt"}
+
+[tool.black]
+line-length = 80

@@ -1,4 +1,6 @@
+*.egg-info/
 certs/
 docker-compose.override.yml
+node_modules/
 providers.traefik.conf
 tts/tmi.min.js

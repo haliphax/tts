@@ -1,10 +1,6 @@
 # tts
 
-Text to speech overlay for OBS
-
-Note: This project has been overhauled to include a server component, as the
-speech synthesis options within the provided version of CEF are unreliable on
-Linux. As such, this project is now Linux-specific.
+Text to speech overlay for OBS (using `espeak-ng`)
 
 ## Setup
 
@@ -13,6 +9,8 @@ Linux. As such, this project is now Linux-specific.
 ```shell
 pactl load-module module-native-protocol-unix socket=/tmp/pulseaudio.socket
 ```
+
+This command has been provided as a script, `socket.sh`.
 
 ### Build containers and start services
 
@@ -33,3 +31,20 @@ for adding to the query string of the overlay, redeem the reward yourself and
 enter `!tts.echo` as the message text. The overlay, if connected and
 authorized, should respond with the internal ID of the reward. Add this ID as
 the `reward` query string parameter for the overlay in OBS.
+
+The command may also be executed directly by the broadcaster and moderators.
+
+Example Twitch message command:
+
+> !tts I'm a little teapot, short and stout
+
+## Variants
+
+The speech voice may be modified with a variant by providing the variant name
+as the first word in the message, prefixed with a `+`. Underscores will be
+converted to spaces before looking up the variant file in
+`/usr/share/espeak-ng-data/voices/!v`.
+
+Example Twitch message command with `Mr serious` variant:
+
+> !tts +Mr_serious all your base are belong to us

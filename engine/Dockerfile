@@ -22,8 +22,10 @@ COPY ./engine /app/engine
 COPY --from=espeak /usr/lib/*espeak* /usr/lib/
 COPY --from=espeak /usr/bin/espeak* /usr/bin/
 COPY --from=espeak /usr/share/espeak-ng-data /usr/share/espeak-ng-data
-RUN  --mount=type=cache,target=/var/cache/apk,sharing=locked \
-	apk add pulseaudio-utils
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" \
+	>> /etc/apk/repositories
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+	apk add mbrola mbrola-voices pulseaudio-utils
 RUN <<-EOF
 	set -eo pipefail
 	adduser -h /app -D -H -g '' -s /bin/false tts

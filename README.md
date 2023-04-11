@@ -1,6 +1,6 @@
 # tts
 
-Text to speech overlay for OBS (using `espeak-ng`)
+Twitch chat text-to-speech overlay for OBS (using `espeak-ng`)
 
 ## Setup
 
@@ -22,6 +22,15 @@ This command will be executed prior to spinning up the service stack when the
 provided `run.sh` startup script is used.
 
 ## Use
+
+The OBS Web Socket Server must be running, without authentication, on
+`localhost`, bound to the default port.
+
+Execute the startup script:
+
+```shell
+./run.sh
+```
 
 Visit http://localhost to go through the full OAuth round trip and get your
 authorized URL for the browser source.

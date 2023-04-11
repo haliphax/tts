@@ -15,12 +15,23 @@ await obs.connect();
 const twitch = twitchClient();
 const commandRgx = /^(\![-_.a-z0-9]+)(?:\s+(.+))?$/i;
 
+async function speak(text) {
+	await obs.call("BroadcastCustomEvent", {
+		eventData: {
+			eventType: "tts-text",
+			text: args,
+		},
+	});
+}
+
 twitch.on("message", async (channel, tags, message, self) => {
 	if (self) return;
 
 	const cmd = commandRgx.exec(message);
 
 	if (cmd) {
+		// command was used
+
 		const command = cmd[1].toLowerCase().substring(1);
 		const args = cmd[2];
 
@@ -33,12 +44,7 @@ twitch.on("message", async (channel, tags, message, self) => {
 			case "tts":
 				if ((!isBroadcaster(tags) && !isModerator(tags)) || !args) return;
 
-				await obs.call("BroadcastCustomEvent", {
-					eventData: {
-						eventType: "tts-text",
-						text: args,
-					},
-				});
+				speak(args);
 
 				break;
 		}
@@ -46,8 +52,8 @@ twitch.on("message", async (channel, tags, message, self) => {
 		hs.hasOwnProperty("reward") &&
 		tags["custom-reward-id"] == hs.reward
 	) {
-		speech.text = message;
-		speechSynthesis.speak(speech);
+		// reward redemption was used
+		speak(message);
 	}
 });
 

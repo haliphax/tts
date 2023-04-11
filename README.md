@@ -4,22 +4,22 @@ Text to speech overlay for OBS (using `espeak-ng`)
 
 ## Setup
 
+### Build images
+
+```shell
+export COMPOSE_DOCKER_CLI_BUILD=1
+export DOCKER_BUILDKIT=1
+docker-compose build
+```
+
 ### Generate a socket for sharing PulseAudio with the engine container
 
 ```shell
 pactl load-module module-native-protocol-unix socket=/tmp/pulseaudio.socket
 ```
 
-This command has been provided as a script, `socket.sh`.
-
-### Build containers and start services
-
-```shell
-export COMPOSE_DOCKER_CLI_BUILD=1
-export DOCKER_BUILDKIT=1
-docker-compose build
-docker-compose up
-```
+This command will be executed prior to spinning up the service stack when the
+provided `run.sh` startup script is used.
 
 ## Use
 
@@ -28,7 +28,7 @@ authorized URL for the browser source.
 
 Create a reward in Twitch that requires a message. To determine the reward ID
 for adding to the query string of the overlay, redeem the reward yourself and
-enter `!tts.echo` as the message text. The overlay, if connected and
+enter `!tts.echo` as the (only) message text. The overlay, if connected and
 authorized, should respond with the internal ID of the reward. Add this ID as
 the `reward` query string parameter for the overlay in OBS.
 

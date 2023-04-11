@@ -19,7 +19,7 @@ async function speak(text) {
 	await obs.call("BroadcastCustomEvent", {
 		eventData: {
 			eventType: "tts-text",
-			text: args,
+			text: text,
 		},
 	});
 }

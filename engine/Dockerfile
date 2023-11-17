@@ -28,16 +28,9 @@ COPY ./pyproject.toml /app/
 COPY ./engine /app/engine
 RUN <<-EOF
 	set -eo pipefail
+	apk add pipewire pipewire-pulse pipewire-tools
 	adduser -h /app -D -H -g '' -s /bin/false tts
-	addgroup tts audio
-	addgroup root audio
 	chown -R tts:tts /app
-	cat >/tmp/pulseaudio.client.conf <<EOF1
-default-server = unix:/tmp/pulseaudio.socket
-autospawn = no
-daemon-binary = /bin/true
-enable-shm = false
-EOF1
 EOF
 USER tts
 RUN <<-EOF

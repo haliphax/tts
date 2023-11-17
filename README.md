@@ -1,35 +1,24 @@
 # tts
 
-Twitch chat text-to-speech overlay for OBS (using `espeak-ng`)
+Twitch chat text-to-speech overlay for OBS (using `espeak-ng` and [PipeWire][])
 
 ## Setup
 
 ### Build images
 
 ```shell
-export COMPOSE_DOCKER_CLI_BUILD=1
-export DOCKER_BUILDKIT=1
-docker-compose build
+docker compose build
 ```
-
-### Generate a socket for sharing PulseAudio with the engine container
-
-```shell
-pactl load-module module-native-protocol-unix socket=/tmp/pulseaudio.socket
-```
-
-This command will be executed prior to spinning up the service stack when the
-provided `run.sh` startup script is used.
 
 ## Use
 
 The OBS Web Socket Server must be running, without authentication, on
 `localhost`, bound to the default port.
 
-Execute the startup script:
+Start the containers:
 
 ```shell
-./run.sh
+docker compose up
 ```
 
 Visit http://localhost to go through the full OAuth round trip and get your
@@ -57,3 +46,5 @@ converted to spaces before looking up the variant file in
 Example Twitch message command with `Mr serious` variant:
 
 > !tts +Mr_serious all your base are belong to us
+
+[pipewire]: https://pipewire.org

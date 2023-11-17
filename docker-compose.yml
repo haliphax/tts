@@ -6,17 +6,14 @@ services:
       context: .
       dockerfile: ./engine/Dockerfile
     environment:
-      PULSE_SERVER: unix:/tmp/pulseaudio.socket
-      PULSE_COOKIE: /tmp/pulseaudio.cookie
+      XDG_RUNTIME_DIR: /app
     image: hxtts:latest
     network_mode: host
     privileged: true
     restart: unless-stopped
     stop_signal: SIGKILL
-    tty: true
     volumes:
-      - /dev/snd:/dev/snd
-      - /tmp/pulseaudio.socket:/tmp/pulseaudio.socket
+      - /run/user/1000/pipewire-0:/app/pipewire-0
 
   nginx:
     image: nginx:latest

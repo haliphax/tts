@@ -2,27 +2,47 @@ import constants from "./constants.js";
 import { hs } from "./util.js";
 import { isBroadcaster, isModerator, twitchClient } from "./twitch.js";
 
-for (let prop of ["channel", "oauth", "username"]) {
+for (let prop of ["channel", "oauth"]) {
 	if (!hs.hasOwnProperty(prop)) {
 		window.location = constants.OAUTH_URL;
 		break;
 	}
 }
 
-const obs = new OBSWebSocket();
-await obs.connect();
+const headers = {
+	Accept: "application/json",
+	"Content-Type": "application/json",
+};
+
+let timestamp = 0;
+const audio = document.createElement("audio");
+audio.autoplay = true;
+audio.addEventListener("ended", async () => {
+	await fetch("/", {
+		body: JSON.stringify({ timestamp }),
+		headers,
+		method: "DELETE",
+	});
+});
+
+document.body.appendChild(audio);
 
 const twitch = twitchClient();
 const commandRgx = /^(\![-_.a-z0-9]+)(?:\s+(.+))?$/i;
 
-async function speak(text) {
-	await obs.call("BroadcastCustomEvent", {
-		eventData: {
-			eventType: "tts-text",
-			text: text,
-		},
-	});
-}
+const speak = async (username, text) => {
+	await fetch("/", {
+		body: JSON.stringify({ text: `${username} says: ${text}` }),
+		headers,
+		method: "POST",
+	})
+		.then((v) => v.json())
+		.then(async (j) => {
+			timestamp = j.timestamp;
+			audio.src = `/mp3/${timestamp}.mp3`;
+			await audio.play();
+		});
+};
 
 twitch.on("message", async (channel, tags, message, self) => {
 	if (self) return;
@@ -44,7 +64,7 @@ twitch.on("message", async (channel, tags, message, self) => {
 			case "tts":
 				if ((!isBroadcaster(tags) && !isModerator(tags)) || !args) return;
 
-				speak(args);
+				speak(tags.username, args);
 
 				break;
 		}
@@ -53,7 +73,7 @@ twitch.on("message", async (channel, tags, message, self) => {
 		tags["custom-reward-id"] == hs.reward
 	) {
 		// reward redemption was used
-		speak(message);
+		speak(tags.username, message);
 	}
 });
 

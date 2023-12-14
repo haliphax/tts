@@ -1,27 +1,24 @@
 # tts
 
-Twitch chat text-to-speech overlay for OBS (using `espeak-ng` and [PipeWire][])
+Twitch chat text-to-speech overlay for OBS (using [lobe-tts][])
 
 ## Setup
 
-### Build images
+### Install dependencies
 
 ```shell
-docker compose build
+npm ci
 ```
 
 ## Use
 
-The OBS Web Socket Server must be running, without authentication, on
-`localhost`, bound to the default port.
-
-Start the containers:
+Start the server:
 
 ```shell
-docker compose up
+npm start
 ```
 
-Visit http://localhost to go through the full OAuth round trip and get your
+Visit http://localhost:3000 to go through the full OAuth round trip and get your
 authorized URL for the browser source.
 
 Create a reward in Twitch that requires a message. To determine the reward ID
@@ -36,15 +33,4 @@ Example Twitch message command:
 
 > !tts I'm a little teapot, short and stout
 
-## Variants
-
-The speech voice may be modified with a variant by providing the variant name
-as the first word in the message, prefixed with a `+`. Underscores will be
-converted to spaces before looking up the variant file in
-`/usr/share/espeak-ng-data/voices/!v`.
-
-Example Twitch message command with `Mr serious` variant:
-
-> !tts +Mr_serious all your base are belong to us
-
-[pipewire]: https://pipewire.org
+[lobe-tts]: https://tts.lobehub.com

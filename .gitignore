@@ -1,6 +1,3 @@
-*.egg-info/
-certs/
-docker-compose.override.yml
+/html/
+/mp3/
 node_modules/
-providers.traefik.conf
-tts/tmi.min.js

@@ -1,5 +1,6 @@
 // monkey patch
 import WebSocket from "ws";
+// @ts-ignore
 global.WebSocket = WebSocket;
 
 import express from "express";
@@ -14,7 +15,7 @@ const writeFile = promisify(fs.writeFile);
 const tts = new EdgeSpeechTTS({ locale: "en-US" });
 const app = express();
 app.use(express.json());
-app.use("/", express.static("./src/public"));
+app.use("/", express.static("./html"));
 app.use("/mp3", express.static("./mp3"));
 
 app.delete("/", async (req, res) => {

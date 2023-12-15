@@ -1,13 +1,14 @@
-import constants from "./constants.js";
-import { hs } from "./util.js";
+import { ChatUserstate, Client } from "tmi.js";
+import constants from "./constants";
+import { hs } from "./util";
 
 /**
  * Twitch API auth headers
- * @param {string} tokenKey Optional key to use when pulling the auth token from
+ * @param tokenKey Optional key to use when pulling the auth token from
  * the current URL's hash string; defaults to `oauth` if unset
- * @returns {Headers} The HTTP headers to use for Twitch API authentication
+ * @returns The HTTP headers to use for Twitch API authentication
  */
-const authHeaders = (tokenKey) => {
+const authHeaders = (tokenKey?: string): Headers => {
 	const token = tokenKey ? hs[tokenKey] : hs.oauth;
 
 	return new Headers({
@@ -18,7 +19,7 @@ const authHeaders = (tokenKey) => {
 
 /** Twitch client */
 const twitchClient = () =>
-	new tmi.Client({
+	new Client({
 		channels: [hs.channel],
 		identity: {
 			username: hs.username,
@@ -27,8 +28,9 @@ const twitchClient = () =>
 	});
 
 /** based on tags, is this user the broadcaster? */
-const isBroadcaster = (tags) => tags.badges.hasOwnProperty("broadcaster");
+const isBroadcaster = (tags: ChatUserstate) =>
+	tags.badges?.hasOwnProperty("broadcaster") ?? false;
 /** based on tags, is this user a moderator? */
-const isModerator = (tags) => tags.mod;
+const isModerator = (tags: ChatUserstate) => tags.mod;
 
 export { authHeaders, isBroadcaster, isModerator, twitchClient };

@@ -10,6 +10,12 @@ Twitch chat text-to-speech overlay for OBS (using [lobe-tts][])
 npm ci
 ```
 
+### Build the overlay
+
+```shell
+npm run build
+```
+
 ## Use
 
 Start the server:

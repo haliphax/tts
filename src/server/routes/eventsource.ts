@@ -7,7 +7,7 @@ export const broadcast = (text: string) => {
 	response.emit("drain");
 };
 
-const route = (app: Express) =>
+const route = (app: Express) => {
 	app.get("/cast", (req, res) => {
 		console.log("EventSource client connected");
 
@@ -21,5 +21,13 @@ const route = (app: Express) =>
 		res.flushHeaders();
 		res.on("close", () => console.log("EventSource client disconnected"));
 	});
+
+	app.post("/cast", (req, res) => {
+		console.log("Received broadcast");
+		console.log({ ...req.body });
+		broadcast(req.body.text);
+		res.sendStatus(200);
+	});
+};
 
 export default route;

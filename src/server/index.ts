@@ -4,7 +4,6 @@ import WebSocket from "ws";
 global.WebSocket = WebSocket;
 
 import express from "express";
-import broadcastRoute from "./routes/broadcast";
 import createMp3Route from "./routes/create-mp3";
 import deleteMp3Route from "./routes/delete-mp3";
 import eventSourceRoute from "./routes/eventsource";
@@ -18,9 +17,7 @@ app.use("/", express.static("./html"));
 app.use("/mp3", express.static("./mp3"));
 
 // add routes
-[broadcastRoute, createMp3Route, deleteMp3Route, eventSourceRoute].map((fn) =>
-	fn(app)
-);
+[createMp3Route, deleteMp3Route, eventSourceRoute].map((fn) => fn(app));
 
 const host = process.env.HOST ?? "localhost";
 const port = parseInt(process.env.PORT ?? "3000");

@@ -3,13 +3,14 @@ import constants from "./constants";
 import { hs } from "./util";
 import { isBroadcaster, isModerator, twitchClient } from "./twitch";
 
-for (let prop of ["channel", "oauth"]) {
+for (let prop of ["channel", "oauth", "voice"]) {
 	if (!hs.hasOwnProperty(prop)) {
 		window.location.href = constants.OAUTH_URL;
 		break;
 	}
 }
 
+const voice = hs.voice;
 const headers = {
 	Accept: "application/json",
 	"Content-Type": "application/json",
@@ -17,6 +18,7 @@ const headers = {
 
 let timestamp = 0;
 const audio = document.createElement("audio");
+
 audio.autoplay = true;
 audio.addEventListener("ended", async () => {
 	await fetch("/", {
@@ -25,7 +27,6 @@ audio.addEventListener("ended", async () => {
 		method: "DELETE",
 	});
 });
-
 document.body.appendChild(audio);
 
 const twitch = twitchClient();
@@ -36,7 +37,7 @@ const speechText = (username: string, text: string) =>
 
 const speak = async (text: string) => {
 	await fetch("/", {
-		body: JSON.stringify({ text }),
+		body: JSON.stringify({ text, voice }),
 		headers,
 		method: "POST",
 	})

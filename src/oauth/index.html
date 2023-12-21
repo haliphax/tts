@@ -13,11 +13,21 @@
 			After submitting this, you will be taken to the live overlay. Copy the URL
 			from your browser for use in your streaming software (e.g. OBS). If you
 			are hooking TTS up to a reward, you will need to get the reward ID (by
-			redeeming it with the text <code>!ttsecho</code>) and add it to the end of
-			the URL like so:
+			redeeming it with the text <code>!ttsecho</code>) and replace the
+			<code>change-me</code> value in the overlay URL.
 		</p>
-		<pre><code>&reward=abcd-efghi-jkl-mnopqrstu-vwxz</code></pre>
 		<form action="../">
+			<p>
+				<label for="voice">Voice:</label>
+				<br />
+				<input type="text" id="voice" value="en-US-AnaNeural" required />
+				<br />
+				<small>
+					<a href="https://speech.microsoft.com/portal/voicegallery">Voices</a>
+					- Use the <em>Sample code</em> feature and look for the
+					<code>SpeechSynthesisVoiceName</code> value
+				</small>
+			</p>
 			<p>
 				<button type="submit">Go!</button>
 			</p>

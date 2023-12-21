@@ -15,7 +15,7 @@ const route = (app: Express) =>
 		const payload = {
 			input: req.body.text,
 			options: {
-				voice: "en-US-AnaNeural",
+				voice: req.body.voice,
 			},
 		};
 		const resp = await tts.create(payload);

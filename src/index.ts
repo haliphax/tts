@@ -6,7 +6,7 @@ import { isBroadcaster, isModerator, twitchClient } from "./twitch";
 for (let prop of ["channel", "oauth", "voice"]) {
 	if (!hs.hasOwnProperty(prop)) {
 		window.location.href = constants.OAUTH_URL;
-		break;
+		throw {};
 	}
 }
 

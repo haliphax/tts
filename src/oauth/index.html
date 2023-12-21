@@ -18,11 +18,6 @@
 		</p>
 		<form action="../">
 			<p>
-				<label for="locale">Locale:</label>
-				<br />
-				<input type="text" id="locale" pattern="[a-z]{2}-[A-Z]{2}" required />
-			</p>
-			<p>
 				<label for="voice">Voice:</label>
 				<br />
 				<input type="text" id="voice" value="AnaNeural" required />
@@ -30,7 +25,8 @@
 				<small>
 					<a href="https://speech.microsoft.com/portal/voicegallery">Voices</a>
 					- Use the <em>Sample code</em> feature and look for the
-					<code>SpeechSynthesisVoiceName</code> value
+					<code>SpeechSynthesisVoiceName</code> value. Locale is set by the
+					server (default <code>en-US</code>).
 				</small>
 			</p>
 			<p>

@@ -3,6 +3,7 @@ import { Express } from "express";
 import fs from "fs";
 import path from "path";
 import { promisify } from "util";
+import constants from "../../constants";
 import tts from "../tts";
 
 const writeFile = promisify(fs.writeFile);
@@ -15,7 +16,7 @@ const route = (app: Express) =>
 		const payload = {
 			input: req.body.text,
 			options: {
-				voice: req.body.voice,
+				voice: `${constants.LOCALE}-${req.body.voice}`,
 			},
 		};
 		const resp = await tts.create(payload);

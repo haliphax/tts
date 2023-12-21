@@ -16,10 +16,8 @@ constants.OAUTH_REDIRECT_URI = encodeURIComponent(
 );
 
 constants.OAUTH_URL =
-	`https://id.twitch.tv/oauth2/authorize` +
-	`?client_id=${constants.CLIENT_ID}` +
-	`&redirect_uri=${constants.OAUTH_REDIRECT_URI}` +
-	`&response_type=token` +
-	`&scope=chat:read`;
+	"https://id.twitch.tv/oauth2/authorize?response_type=token&scope=chat:read" +
+	`&client_id=${constants.CLIENT_ID}` +
+	`&redirect_uri=${constants.OAUTH_REDIRECT_URI}`;
 
 export default constants;

@@ -18,9 +18,14 @@
 		</p>
 		<form action="../">
 			<p>
+				<label for="locale">Locale:</label>
+				<br />
+				<input type="text" id="locale" pattern="[a-z]{2}-[A-Z]{2}" required />
+			</p>
+			<p>
 				<label for="voice">Voice:</label>
 				<br />
-				<input type="text" id="voice" value="en-US-AnaNeural" required />
+				<input type="text" id="voice" value="AnaNeural" required />
 				<br />
 				<small>
 					<a href="https://speech.microsoft.com/portal/voicegallery">Voices</a>

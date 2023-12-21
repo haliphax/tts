@@ -1,12 +1,13 @@
+import { EdgeSpeechTTS } from "@lobehub/tts";
 import { Buffer } from "buffer";
 import { Express } from "express";
 import fs from "fs";
 import path from "path";
 import { promisify } from "util";
 import constants from "../../constants";
-import tts from "../tts";
 
 const writeFile = promisify(fs.writeFile);
+const tts = new EdgeSpeechTTS({ locale: constants.LOCALE });
 
 const route = (app: Express) =>
 	app.post("/", async (req, res) => {

@@ -19,6 +19,7 @@ const route = (app: Express) =>
 			Connection: "keep-alive",
 		});
 		res.flushHeaders();
+		res.on("close", () => console.log("EventSource client disconnected"));
 	});
 
 export default route;

@@ -39,4 +39,16 @@ Example Twitch message command:
 
 > !tts I'm a little teapot, short and stout
 
+### Advanced usage
+
+The TTS trigger can be used without chat commands or reward redemptions by
+sending a direct HTTP POST request:
+
+```shell
+curl -X POST \
+	-H 'Content-Type: application/json' \
+	-d '{"text":"hello, world"}' \
+	http://localhost:3000/cast
+```
+
 [lobe-tts]: https://tts.lobehub.com

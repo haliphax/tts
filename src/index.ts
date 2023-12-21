@@ -31,9 +31,12 @@ document.body.appendChild(audio);
 const twitch = twitchClient();
 const commandRgx = /^(\![-_.a-z0-9]+)(?:\s+(.+))?$/i;
 
-const speak = async (username: string, text: string) => {
+const speechText = (username: string, text: string) =>
+	`${username} says: ${text}`;
+
+const speak = async (text: string) => {
 	await fetch("/", {
-		body: JSON.stringify({ text: `${username} says: ${text}` }),
+		body: JSON.stringify({ text }),
 		headers,
 		method: "POST",
 	})
@@ -45,6 +48,7 @@ const speak = async (username: string, text: string) => {
 		});
 };
 
+// Twitch chat listener
 twitch.on(
 	"message",
 	async (
@@ -65,14 +69,20 @@ twitch.on(
 
 			switch (command) {
 				case "tts.echo":
-					if (!isBroadcaster(tags) && !isModerator(tags)) return;
+					if (!isBroadcaster(tags) && !isModerator(tags)) {
+						return;
+					}
 
 					twitch.say(hs.channel, tags["custom-reward-id"]);
-					break;
-				case "tts":
-					if ((!isBroadcaster(tags) && !isModerator(tags)) || !args) return;
 
-					speak(tags.username!, args);
+					break;
+
+				case "tts":
+					if ((!isBroadcaster(tags) && !isModerator(tags)) || !args) {
+						return;
+					}
+
+					speak(speechText(tags.username!, args));
 
 					break;
 			}
@@ -81,7 +91,7 @@ twitch.on(
 			tags["custom-reward-id"] == hs.reward
 		) {
 			// reward redemption was used
-			speak(tags.username!, message);
+			speak(speechText(tags.username!, message));
 		}
 	}
 );
@@ -100,3 +110,7 @@ twitch
 	.then(() =>
 		setTimeout(() => document.body.setAttribute("style", "display:none"), 3000)
 	);
+
+// EventSource listener
+const events = new EventSource("/cast");
+events.addEventListener("message", (ev) => speak(ev.data));

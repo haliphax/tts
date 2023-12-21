@@ -16,7 +16,7 @@
 	},
 	"scripts": {
 		"build": "vite build src",
-		"start": "tsx src/server.ts"
+		"start": "tsx src/server/index.ts"
 	},
 	"type": "module"
 }

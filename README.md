@@ -1,8 +1,13 @@
 # tts
 
-Twitch chat text-to-speech overlay for OBS (using [lobe-tts][])
+Twitch chat text-to-speech overlay for OBS (using [Google Cloud TTS][])
 
 ## Setup
+
+### Authenticate
+
+You will need to set up a Google Cloud project, add the Text to Speech service,
+and then use the Google Cloud CLI to authenticate yourself.
 
 ### Install dependencies
 
@@ -51,4 +56,4 @@ curl -X POST \
 	http://localhost:3000/cast
 ```
 
-[lobe-tts]: https://tts.lobehub.com
+[google cloud tts]: https://cloud.google.com/text-to-speech

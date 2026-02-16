@@ -1,8 +1,3 @@
-// monkey patch for lobe-tts
-import WebSocket from "ws";
-// @ts-ignore
-global.WebSocket = WebSocket;
-
 import express from "express";
 import createMp3Route from "./routes/create-mp3";
 import deleteMp3Route from "./routes/delete-mp3";

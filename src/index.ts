@@ -3,12 +3,29 @@ import constants from "./constants";
 import { hs } from "./util";
 import { isBroadcaster, isModerator, twitchClient } from "./twitch";
 
-for (let prop of ["channel", "oauth", "voice"]) {
+for (let prop of ["channel", "oauth"]) {
 	if (!hs.hasOwnProperty(prop)) {
 		window.location.href = constants.OAUTH_URL;
 		throw {};
 	}
 }
+
+const exclude = [];
+let readAll = false;
+
+if (hs.hasOwnProperty("exclude")) {
+	for (let ex of hs.exclude.split(",")) {
+		exclude.push(ex);
+	}
+}
+
+console.log(exclude);
+
+if (hs.hasOwnProperty("all")) {
+	readAll = true;
+}
+
+console.log(readAll);
 
 const voice = hs.voice;
 const headers = {
@@ -60,11 +77,15 @@ twitch.on(
 	) => {
 		if (self) return;
 
+		// check exclude list
+		if (exclude.includes(tags.username!.toLowerCase())) {
+			return;
+		}
+
 		const cmd = commandRgx.exec(message);
 
 		if (cmd) {
 			// command was used
-
 			const command = cmd[1].toLowerCase().substring(1);
 			const args = cmd[2];
 
@@ -88,10 +109,12 @@ twitch.on(
 					break;
 			}
 		} else if (
-			hs.hasOwnProperty("reward") &&
-			tags["custom-reward-id"] == hs.reward
+			(
+				hs.hasOwnProperty("reward") &&
+				tags["custom-reward-id"] == hs.reward
+			) || readAll
 		) {
-			// reward redemption was used
+			// reward redemption was used or readAll enabled
 			speak(speechText(tags.username!, message));
 		}
 	}

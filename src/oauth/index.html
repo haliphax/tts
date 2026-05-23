@@ -16,17 +16,24 @@
 			redeeming it with the text <code>!ttsecho</code>) and replace the
 			<code>change-me</code> value in the overlay URL.
 		</p>
-		<form action="../">
+		<form>
 			<p>
-				<label for="voice">Voice:</label>
+				<label for="exclude">Exclude:</label>
 				<br />
-				<input type="text" id="voice" value="AnaNeural" required />
+				<input type="text" id="exclude" />
 				<br />
 				<small>
-					<a href="https://speech.microsoft.com/portal/voicegallery">Voices</a>
-					- Use the <em>Sample code</em> feature and look for the
-					<code>SpeechSynthesisVoiceName</code> value. Locale is set by the
-					server (default <code>en-US</code>).
+					Comma-separated list of usernames (case-insensitive) to exclude from
+					TTS
+				</small>
+			</p>
+			<p>
+				<label for="all">Read all:</label>
+				<br />
+				<input type="checkbox" id="all" />
+				<br />
+				<small>
+					Read all chat messages (except commands), respecting exclude list
 				</small>
 			</p>
 			<p>

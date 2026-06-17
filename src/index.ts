@@ -10,7 +10,9 @@ for (let prop of ["channel", "oauth"]) {
 	}
 }
 
-const exclude = [];
+let isPlaying = false;
+const queue: string[] = [];
+const exclude: string[] = [];
 let readAll = false;
 
 if (hs.hasOwnProperty("exclude")) {
@@ -19,13 +21,9 @@ if (hs.hasOwnProperty("exclude")) {
 	}
 }
 
-console.log(exclude);
-
 if (hs.hasOwnProperty("all")) {
 	readAll = true;
 }
-
-console.log(readAll);
 
 const voice = hs.voice;
 const headers = {
@@ -49,6 +47,15 @@ document.body.appendChild(audio);
 const twitch = twitchClient();
 const commandRgx = /^(\![-_.a-z0-9]+)(?:\s+(.+))?$/i;
 
+const enqueue = (text: string) => {
+	if (queue.length === 0 && !isPlaying) {
+		speak(text);
+		return;
+	}
+
+	queue.push(text);
+};
+
 const speechText = (username: string, text: string) =>
 	`${username} says: ${text}`;
 
@@ -65,6 +72,22 @@ const speak = async (text: string) => {
 			await audio.play();
 		});
 };
+
+// audio queue
+audio.addEventListener("play", () => {
+	console.log("playing");
+	isPlaying = true;
+});
+
+audio.addEventListener("ended", () => {
+	console.log("ended");
+	isPlaying = false;
+
+	if (queue.length > 0) {
+		const next = queue.shift()!;
+		speak(next);
+	}
+});
 
 // Twitch chat listener
 twitch.on(
@@ -104,7 +127,7 @@ twitch.on(
 						return;
 					}
 
-					speak(speechText(tags.username!, args));
+					enqueue(speechText(tags.username!, args));
 
 					break;
 			}
@@ -115,7 +138,7 @@ twitch.on(
 			) || readAll
 		) {
 			// reward redemption was used or readAll enabled
-			speak(speechText(tags.username!, message));
+			enqueue(speechText(tags.username!, message));
 		}
 	}
 );
